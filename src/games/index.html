@@ -1,367 +1,50 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StickJump Obstacle</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.55.2/phaser.min.js"></script>
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stickjump Obstacle</title>
+  <style>
         body {
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             font-family: 'Arial', sans-serif;
         }
         #game-container {
-            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
             border-radius: 10px;
             overflow: hidden;
+        }
+        #info-panel {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 14px;
+            max-width: 300px;
+        }
+        #info-panel h3 {
+            margin-top: 0;
+            color: #4CAF50;
+        }
+        #info-panel code {
+            background: #333;
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #0f0;
         }
     </style>
 </head>
 <body>
-    <div id="game-container"></div>
-    
-    <script>
-        class GameScene extends Phaser.Scene {
-            constructor() {
-                super('GameScene');
-            }
-
-            preload() {
-                // Create stickman texture
-                this.textures.generate('stickman', {
-                    data: ['00000000000000000000',
-                           '00000000000000000000',
-                           '00000011111100000000',
-                           '00000110000110000000',
-                           '00000100000010000000',
-                           '00000110000110000000',
-                           '00000011111100000000',
-                           '00000000110000000000',
-                           '00000000110000000000',
-                           '00000001111000000000',
-                           '00000011111100000000',
-                           '00000110001110000000',
-                           '00001100000011000000',
-                           '00000000110000000000',
-                           '00000000110000000000',
-                           '00000001111000000000',
-                           '00000011001100000000',
-                           '00000110000110000000',
-                           '00001100000011000000',
-                           '00000000000000000000'],
-                    pixelWidth: 1,
-                    pixelHeight: 1
-                });
-            }
-
-            create() {
-                this.currentLevel = 1;
-                this.canJump = true;
-                this.movingPlatforms = [];
-
-                // Background gradient
-                const graphics = this.add.graphics();
-                graphics.fillGradientStyle(0x87CEEB, 0x87CEEB, 0xE0F6FF, 0xE0F6FF, 1);
-                graphics.fillRect(0, 0, 800, 600);
-                
-                // Ground
-                const ground = this.add.rectangle(400, 590, 800, 20, 0x8B4513);
-                this.physics.add.existing(ground, true);
-                
-                // UI
-                this.levelText = this.add.text(16, 16, 'LEVEL 1', {
-                    fontSize: '32px',
-                    fill: '#fff',
-                    fontStyle: 'bold',
-                    stroke: '#000',
-                    strokeThickness: 6
-                });
-
-                this.add.text(16, 56, '← → Move  |  SPACE Jump', {
-                    fontSize: '18px',
-                    fill: '#fff',
-                    stroke: '#000',
-                    strokeThickness: 4
-                });
-
-                // Initialize groups
-                this.platformsGroup = this.physics.add.staticGroup();
-                this.spikesGroup = this.physics.add.group();
-                
-                // Add ground to platforms
-                this.platformsGroup.add(ground);
-                
-                // Create player sprite
-                this.player = this.add.rectangle(100, 500, 20, 40, 0x000000);
-                this.physics.add.existing(this.player);
-                this.player.body.setCollideWorldBounds(true);
-                this.player.body.setMaxVelocity(300, 600);
-
-                // Draw stickman on player
-                this.stickmanGraphics = this.add.graphics();
-                this.updateStickman();
-
-                // Level definitions
-                this.levels = {
-                    1: {
-                        platforms: [
-                            { x: 100, y: 550, width: 200, height: 20 },
-                            { x: 350, y: 450, width: 150, height: 20 },
-                            { x: 600, y: 350, width: 150, height: 20 }
-                        ],
-                        spikes: [
-                            { x: 250, y: 540 },
-                            { x: 280, y: 540 },
-                            { x: 450, y: 440 }
-                        ],
-                        finish: { x: 700, y: 300 }
-                    },
-                    2: {
-                        platforms: [
-                            { x: 100, y: 550, width: 150, height: 20 },
-                            { x: 300, y: 480, width: 100, height: 20 },
-                            { x: 500, y: 400, width: 100, height: 20 },
-                            { x: 680, y: 320, width: 120, height: 20 }
-                        ],
-                        spikes: [
-                            { x: 200, y: 540 },
-                            { x: 350, y: 470 },
-                            { x: 380, y: 470 },
-                            { x: 550, y: 390 },
-                            { x: 580, y: 390 }
-                        ],
-                        movingPlatforms: [
-                            { startX: 250, y: 350, endX: 380, speed: 100, width: 100 }
-                        ],
-                        finish: { x: 730, y: 270 }
-                    },
-                    3: {
-                        platforms: [
-                            { x: 100, y: 550, width: 120, height: 20 },
-                            { x: 280, y: 480, width: 80, height: 20 },
-                            { x: 450, y: 420, width: 80, height: 20 },
-                            { x: 620, y: 350, width: 80, height: 20 }
-                        ],
-                        spikes: [
-                            { x: 180, y: 540 },
-                            { x: 210, y: 540 },
-                            { x: 330, y: 470 },
-                            { x: 500, y: 410 },
-                            { x: 530, y: 410 },
-                            { x: 670, y: 340 }
-                        ],
-                        movingPlatforms: [
-                            { startX: 180, y: 380, endX: 320, speed: 120, width: 90 },
-                            { startX: 520, y: 280, endX: 680, speed: 150, width: 90 }
-                        ],
-                        finish: { x: 750, y: 220 }
-                    }
-                };
-
-                // Create level
-                this.createLevel(this.currentLevel);
-
-                // Collisions
-                this.physics.add.collider(this.player, this.platformsGroup);
-                this.physics.add.overlap(this.player, this.spikesGroup, this.hitSpike, null, this);
-                this.physics.add.overlap(this.player, this.finishSprite, this.reachFinish, null, this);
-
-                // Input
-                this.cursors = this.input.keyboard.createCursorKeys();
-                this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-            }
-
-            updateStickman() {
-                this.stickmanGraphics.clear();
-                this.stickmanGraphics.lineStyle(3, 0x000000, 1);
-                
-                const x = this.player.x;
-                const y = this.player.y;
-                
-                // Head
-                this.stickmanGraphics.strokeCircle(x, y - 30, 8);
-                
-                // Body
-                this.stickmanGraphics.beginPath();
-                this.stickmanGraphics.moveTo(x, y - 22);
-                this.stickmanGraphics.lineTo(x, y - 5);
-                this.stickmanGraphics.strokePath();
-                
-                // Arms
-                this.stickmanGraphics.beginPath();
-                this.stickmanGraphics.moveTo(x - 10, y - 18);
-                this.stickmanGraphics.lineTo(x, y - 15);
-                this.stickmanGraphics.lineTo(x + 10, y - 18);
-                this.stickmanGraphics.strokePath();
-                
-                // Legs
-                this.stickmanGraphics.beginPath();
-                this.stickmanGraphics.moveTo(x, y - 5);
-                this.stickmanGraphics.lineTo(x - 8, y + 10);
-                this.stickmanGraphics.moveTo(x, y - 5);
-                this.stickmanGraphics.lineTo(x + 8, y + 10);
-                this.stickmanGraphics.strokePath();
-            }
-
-            createLevel(level) {
-                // Clear previous level
-                const ground = this.platformsGroup.getChildren()[0];
-                this.platformsGroup.clear(false, true);
-                this.platformsGroup.add(ground);
-                
-                this.spikesGroup.clear(true, true);
-                if (this.finishSprite) this.finishSprite.destroy();
-                if (this.flagGraphics) this.flagGraphics.destroy();
-                this.movingPlatforms = [];
-
-                const levelData = this.levels[level];
-                
-                // Static Platforms
-                levelData.platforms.forEach(p => {
-                    const platform = this.add.rectangle(p.x, p.y, p.width, p.height, 0x8B4513);
-                    platform.setStrokeStyle(2, 0x654321);
-                    this.physics.add.existing(platform, true);
-                    this.platformsGroup.add(platform);
-                });
-
-                // Moving Platforms
-                if (levelData.movingPlatforms) {
-                    levelData.movingPlatforms.forEach(mp => {
-                        const movingPlat = this.add.rectangle(mp.startX, mp.y, mp.width, 20, 0xD2691E);
-                        movingPlat.setStrokeStyle(2, 0x8B4513);
-                        this.physics.add.existing(movingPlat);
-                        movingPlat.body.setImmovable(true);
-                        movingPlat.body.setAllowGravity(false);
-                        movingPlat.body.setVelocityX(mp.speed);
-                        movingPlat.startX = mp.startX;
-                        movingPlat.endX = mp.endX;
-                        movingPlat.speed = mp.speed;
-                        this.movingPlatforms.push(movingPlat);
-                        this.platformsGroup.add(movingPlat);
-                    });
-                }
-
-                // Spikes
-                levelData.spikes.forEach(s => {
-                    const spike = this.add.triangle(s.x, s.y - 10, 0, 10, -10, -10, 10, -10, 0xFF0000);
-                    spike.setStrokeStyle(2, 0x8B0000);
-                    this.physics.add.existing(spike, true);
-                    this.spikesGroup.add(spike);
-                });
-
-                // Finish Flag
-                this.flagGraphics = this.add.graphics();
-                this.flagGraphics.fillStyle(0x000000, 1);
-                this.flagGraphics.fillRect(levelData.finish.x - 2, levelData.finish.y - 50, 4, 50);
-                this.flagGraphics.fillStyle(0x00FF00, 1);
-                this.flagGraphics.fillTriangle(
-                    levelData.finish.x + 2, levelData.finish.y - 45,
-                    levelData.finish.x + 2, levelData.finish.y - 25,
-                    levelData.finish.x + 27, levelData.finish.y - 35
-                );
-                this.flagGraphics.lineStyle(2, 0x008800, 1);
-                this.flagGraphics.strokeTriangle(
-                    levelData.finish.x + 2, levelData.finish.y - 45,
-                    levelData.finish.x + 2, levelData.finish.y - 25,
-                    levelData.finish.x + 27, levelData.finish.y - 35
-                );
-                
-                this.finishSprite = this.add.rectangle(levelData.finish.x, levelData.finish.y - 25, 30, 50, 0x00FF00, 0);
-                this.physics.add.existing(this.finishSprite, true);
-            }
-
-            update() {
-                // Player movement
-                if (this.cursors.left.isDown) {
-                    this.player.body.setVelocityX(-200);
-                } else if (this.cursors.right.isDown) {
-                    this.player.body.setVelocityX(200);
-                } else {
-                    this.player.body.setVelocityX(this.player.body.velocity.x * 0.8);
-                }
-
-                // Jump
-                this.canJump = this.player.body.touching.down || this.player.body.blocked.down;
-                
-                if (Phaser.Input.Keyboard.JustDown(this.spaceKey) && this.canJump) {
-                    this.player.body.setVelocityY(-450);
-                }
-
-                // Update stickman position
-                this.updateStickman();
-
-                // Update moving platforms
-                this.movingPlatforms.forEach(plat => {
-                    if (plat.body.velocity.x > 0 && plat.x >= plat.endX) {
-                        plat.body.setVelocityX(-plat.speed);
-                    } else if (plat.body.velocity.x < 0 && plat.x <= plat.startX) {
-                        plat.body.setVelocityX(plat.speed);
-                    }
-                });
-
-                // Reset if fall
-                if (this.player.y > 600) {
-                    this.resetPlayer();
-                }
-            }
-
-            hitSpike(player, spike) {
-                this.cameras.main.shake(200, 0.01);
-                this.resetPlayer();
-            }
-
-            resetPlayer() {
-                this.player.x = 100;
-                this.player.y = 500;
-                this.player.body.setVelocity(0, 0);
-            }
-
-            reachFinish() {
-                this.currentLevel++;
-                
-                if (this.currentLevel > 3) {
-                    this.levelText.setText('🎉 YOU WIN! 🎉');
-                    this.levelText.setFontSize('48px');
-                    this.time.delayedCall(3000, () => {
-                        this.currentLevel = 1;
-                        this.levelText.setText('LEVEL 1');
-                        this.levelText.setFontSize('32px');
-                        this.createLevel(this.currentLevel);
-                        this.resetPlayer();
-                    });
-                } else {
-                    this.levelText.setText('LEVEL ' + this.currentLevel);
-                    this.cameras.main.flash(200);
-                    this.createLevel(this.currentLevel);
-                    this.resetPlayer();
-                }
-            }
-        }
-
-        const config = {
-            type: Phaser.AUTO,
-            width: 800,
-            height: 600,
-            parent: 'game-container',
-            backgroundColor: '#87CEEB',
-            physics: {
-                default: 'arcade',
-                arcade: {
-                    gravity: { y: 1000 },
-                    debug: true
-                }
-            },
-            scene: GameScene
-        };
-
-        const game = new Phaser.Game(config);
-    </script>
+  <div id="game-container"></div>
+  <script type="module" src="main.js"></script>
 </body>
 </html>
