@@ -6,7 +6,7 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.currentLevel = 5;
+    this.currentLevel = 1;
     this.canJump = true;
     this.movingPlatformsArray = [];
 
