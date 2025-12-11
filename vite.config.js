@@ -1,12 +1,16 @@
 import { defineConfig } from 'vite';
-import { resolve } from 'path';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),
-        game: resolve(__dirname, 'src/games/index.html'),
+        main: resolve(__dirname, 'index.html'), // Halaman utama
+        game: resolve(__dirname, 'src/games/index.html'), // Halaman game
       },
     },
   },
