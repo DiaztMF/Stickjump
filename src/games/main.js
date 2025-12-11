@@ -6,11 +6,11 @@ class GameScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('gameBackground', '../background/Summer5.png');
-    this.load.audio('bgm', '../sound/Backsound.mp3');
-    this.load.audio('jump_sound', '../sound/Jumpsound.mp3');
-    this.load.audio('level_complete_sound', '../sound/levelcomplete.mp3');
-    this.load.audio('win_sound', '../sound/winner.mp3');
+    this.load.image('gameBackground', '/background/Summer5.png');
+    this.load.audio('bgm', '/sound/Backsound.mp3');
+    this.load.audio('jump_sound', '/sound/Jumpsound.mp3');
+    this.load.audio('level_complete_sound', '/sound/levelcomplete.mp3');
+    this.load.audio('win_sound', '/sound/winner.mp3');
   }
 
   create() {
