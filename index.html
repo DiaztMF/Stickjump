@@ -1,11 +1,382 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>stick-warzone</title>
-  </head>
-  <body>
-    <a href="./src/games/index.html">Klik woy</a>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stick Jump</title>
+  <link rel="stylesheet" href="assets/style/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+</head>
+
+<body>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+  <header class="fixed top-0 left-0 w-full z-50 flex p-6 items-center justify-between shadow-lg bg-white">
+    <a href="index.html" class="nav-title text-2xl font-black montserrat">Stick Jump</a>
+
+    <nav>
+      <ul class="nav-links flex gap-4 font-medium poppins">
+        <li><a href="#hero" class="p-4">Home</a></li>
+        <li><a href="#about" class="p-4">Feature</a></li>
+        <li><a href="#documentation" class="p-4">Documentation</a></li>
+        <li><a href="#contact" class="p-4">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="hero" class="hero-section relative flex flex-col items-center justify-center text-center gap-6 h-[90vh] pt-24 px-6">
+
+      <!-- Video -->
+      <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
+        <source src="assets/img/demo.mp4" type="video/mp4">
+      </video>
+
+      <!-- Overlay -->
+      <div class="absolute inset-0 bg-black/60"></div>
+
+      <div class="relative z-10 flex flex-col items-center gap-6">
+        <h1 class="text-5xl font-extrabold montserrat text-white">Welcome to Stick Jump</h1>
+        <p class="text-lg poppins max-w-2xl text-gray-200">
+          Experience the ultimate stick figure jumping adventure! Navigate through challenging obstacles and reach new
+          heights in this thrilling game.
+        </p>
+        <a href="src/games/index.html"
+          class="cta-btn text-white px-6 py-3 rounded-full hover:bg-blue-600 transition duration-300 poppins font-medium">
+          Play Now
+        </a>
+      </div>
+
+    </section>
+
+    <section id="about" class="about-section mt-24 px-6 bg-gray-100 text-center">
+      <div class="flex items-center justify-center gap-3 mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1E90FF" class="size-8 text-gray-800">
+          <path fill-rule="evenodd"
+            d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+            clip-rule="evenodd" />
+        </svg>
+        <h2 class="text-3xl font-bold montserrat">About Stick Jump</h2>
+      </div>
+      <p class="max-w-3xl mx-auto text-gray-700 poppins">
+        Stick Jump is a thrilling 2D platformer inspired by classics, combining nostalgic gameplay with fresh
+        challenges. Control our agile hero as he leaps across treacherous gaps, avoids cunning traps, and outsmarts
+        various foes to reach the finish line.
+      </p>
+    </section>
+
+    <section id="feature" class="my-24 px-6 bg-slate-50 text-center h-[40vh]">
+      <div class="flex items-center justify-center gap-3 mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#4F46E5" class="size-8">
+          <path fill-rule="evenodd"
+            d="M9 4.5a.75.75 0 0 1 .721.544l.813 2.846a3.75 3.75 0 0 0 2.576 2.576l2.846.813a.75.75 0 0 1 0 1.442l-2.846.813a3.75 3.75 0 0 0-2.576 2.576l-.813 2.846a.75.75 0 0 1-1.442 0l-.813-2.846a3.75 3.75 0 0 0-2.576-2.576l-2.846-.813a.75.75 0 0 1 0-1.442l2.846-.813A3.75 3.75 0 0 0 7.466 7.89l.813-2.846A.75.75 0 0 1 9 4.5ZM18 1.5a.75.75 0 0 1 .728.568l.258 1.036c.236.94.97 1.674 1.91 1.91l1.036.258a.75.75 0 0 1 0 1.456l-1.036.258c-.94.236-1.674.97-1.91 1.91l-.258 1.036a.75.75 0 0 1-1.456 0l-.258-1.036a2.625 2.625 0 0 0-1.91-1.91l-1.036-.258a.75.75 0 0 1 0-1.456l1.036-.258a2.625 2.625 0 0 0 1.91-1.91l.258-1.036A.75.75 0 0 1 18 1.5ZM16.5 15a.75.75 0 0 1 .712.513l.394 1.183c.15.447.5.799.948.948l1.183.395a.75.75 0 0 1 0 1.422l-1.183.395c-.447.15-.799.5-.948.948l-.395 1.183a.75.75 0 0 1-1.422 0l-.395-1.183a1.5 1.5 0 0 0-.948-.948l-1.183-.395a.75.75 0 0 1 0-1.422l1.183-.395c.447-.15.799-.5.948-.948l.395-1.183A.75.75 0 0 1 16.5 15Z"
+            clip-rule="evenodd" />
+        </svg>
+
+        <h2 class="text-3xl font-bold montserrat">Feature</h2>
+      </div>
+
+      <div class="feature-content grid grid-cols-1 md:grid-cols-4 gap-6 max-w-6xl my-8 mx-auto">
+        <div data-aos="fade-up-right" data-aos-delay="100">
+          <div
+            class="feature-card bg-white rounded-2xl p-8 flex-row items-start gap-4 text-left 
+              transition-all duration-300 shadow-[0_4px_6px_2px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_12px_4px_rgba(0,0,0,0.3)] hover:-translate-y-1.5">
+
+            <div class="w-12 h-12 bg-indigo-500 rounded-xl flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="size-7">
+                <path fill-rule="evenodd"
+                  d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262l10.5-11.25a.75.75 0 0 1 .913-.143Z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+
+            <div class="justify-start">
+              <h3 class="text-xl font-bold montserrat pt-6">Dynamic Levels</h3>
+              <p class="text-gray-700 poppins">Explore unique, beautifully crafted levels.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <div data-aos="fade-up" data-aos-delay="100">
+          <div
+            class="feature-card bg-white rounded-2xl p-8 flex-row items-start gap-4 text-left 
+              transition-all duration-300 shadow-[0_4px_6px_2px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_12px_4px_rgba(0,0,0,0.3)] hover:-translate-y-1.5">
+
+            <div class="w-12 h-12 bg-indigo-500 rounded-xl flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="size-7">
+                <path d="M16.5 7.5h-9v9h9v-9Z" />
+                <path fill-rule="evenodd"
+                  d="M8.25 2.25A.75.75 0 0 1 9 3v.75h2.25V3a.75.75 0 0 1 1.5 0v.75H15V3a.75.75 0 0 1 1.5 0v.75h.75a3 3 0 0 1 3 3v.75H21A.75.75 0 0 1 21 9h-.75v2.25H21a.75.75 0 0 1 0 1.5h-.75V15H21a.75.75 0 0 1 0 1.5h-.75v.75a3 3 0 0 1-3 3h-.75V21a.75.75 0 0 1-1.5 0v-.75h-2.25V21a.75.75 0 0 1-1.5 0v-.75H9V21a.75.75 0 0 1-1.5 0v-.75h-.75a3 3 0 0 1-3-3v-.75H3A.75.75 0 0 1 3 15h.75v-2.25H3a.75.75 0 0 1 0-1.5h.75V9H3a.75.75 0 0 1 0-1.5h.75v-.75a3 3 0 0 1 3-3h.75V3a.75.75 0 0 1 .75-.75ZM6 6.75A.75.75 0 0 1 6.75 6h10.5a.75.75 0 0 1 .75.75v10.5a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V6.75Z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+
+            <div class="justify-start">
+              <h3 class="text-xl font-bold montserrat pt-6">Lightweight</h3>
+              <p class="text-gray-700 poppins">Runs smoothly on low spec devices.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <div data-aos="fade-up" data-aos-delay="100">
+          <div
+            class="feature-card bg-white rounded-2xl p-8 flex-row items-start gap-4 text-left 
+              transition-all duration-300 shadow-[0_4px_6px_2px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_12px_4px_rgba(0,0,0,0.3)] hover:-translate-y-1.5">
+
+            <div class="w-12 h-12 bg-indigo-500 rounded-xl flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="size-7">
+                <path fill-rule="evenodd"
+                  d="M12 1.5a.75.75 0 0 1 .75.75V4.5a.75.75 0 0 1-1.5 0V2.25A.75.75 0 0 1 12 1.5ZM5.636 4.136a.75.75 0 0 1 1.06 0l1.592 1.591a.75.75 0 0 1-1.061 1.06l-1.591-1.59a.75.75 0 0 1 0-1.061Zm12.728 0a.75.75 0 0 1 0 1.06l-1.591 1.592a.75.75 0 0 1-1.06-1.061l1.59-1.591a.75.75 0 0 1 1.061 0Zm-6.816 4.496a.75.75 0 0 1 .82.311l5.228 7.917a.75.75 0 0 1-.777 1.148l-2.097-.43 1.045 3.9a.75.75 0 0 1-1.45.388l-1.044-3.899-1.601 1.42a.75.75 0 0 1-1.247-.606l.569-9.47a.75.75 0 0 1 .554-.68ZM3 10.5a.75.75 0 0 1 .75-.75H6a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 10.5Zm14.25 0a.75.75 0 0 1 .75-.75h2.25a.75.75 0 0 1 0 1.5H18a.75.75 0 0 1-.75-.75Zm-8.962 3.712a.75.75 0 0 1 0 1.061l-1.591 1.591a.75.75 0 1 1-1.061-1.06l1.591-1.592a.75.75 0 0 1 1.06 0Z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+
+            <div class="justify-start">
+              <h3 class="text-xl font-bold montserrat pt-6">Easy controls</h3>
+              <p class="text-gray-700 poppins">Tap, click, or arrow-key friendly gameplay.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <div data-aos="fade-up-left" data-aos-delay="100">
+          <div
+            class="feature-card bg-white rounded-2xl p-8 flex-row items-start gap-4 text-left 
+              transition-all duration-300 shadow-[0_4px_6px_2px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_12px_4px_rgba(0,0,0,0.3)] hover:-translate-y-1.5">
+
+            <div class="w-12 h-12 bg-indigo-500 rounded-xl flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="size-7">
+                <path fill-rule="evenodd"
+                  d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003ZM12 8.25a.75.75 0 0 1 .75.75v3.75a.75.75 0 0 1-1.5 0V9a.75.75 0 0 1 .75-.75Zm0 8.25a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Z"
+                  clip-rule="evenodd" />
+              </svg>
+            </div>
+
+            <div class="justify-start">
+              <h3 class="text-xl font-bold montserrat pt-6">Obstacles</h3>
+              <p class="text-gray-700 poppins">Avoid traps, gaps, and moving hazards.</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="documentation" class="my-24 px-6 text-center bg-[#CFF5E7] py-12">
+      <h2 class="text-3xl font-bold text-center montserrat mb-10 flex items-center justify-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="#10A594" viewBox="0 0 24 24" class="size-8">
+          <path
+            d="M6 4.5A2.5 2.5 0 0 1 8.5 2h7A2.5 2.5 0 0 1 18 4.5v15a.5.5 0 0 1-.757.429L12 16.25l-5.243 3.679A.5.5 0 0 1 6 19.5v-15Z" />
+        </svg>
+        Documentation
+      </h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 px-8">
+        <div data-aos="fade-up" data-aos-delay="100">
+          <div
+            class="documentation-card rounded-2xl overflow-hidden bg-white transition-all duration-300 shadow-[0_4px_6px_2px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_12px_4px_rgba(0,0,0,0.3)] hover:-translate-y-1.5">
+
+            <div class="h-40 bg-gray-200 flex items-center justify-center">
+              <img src="assets/img/level1.png" class="h-full w-full object-cover" />
+            </div>
+
+            <div class="bg-[#10A594] text-white p-6 text-center">
+              <h3 class="text-xl font-semibold montserrat">Level 1</h3>
+              <p class="poppins opacity-90 text-sm mt-1">The First Jump.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <div data-aos="fade-up" data-aos-delay="100">
+          <div
+            class="documentation-card rounded-2xl overflow-hidden bg-white transition-all duration-300 shadow-[0_4px_6px_2px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_12px_4px_rgba(0,0,0,0.3)] hover:-translate-y-1.5">
+
+            <div class="h-40 bg-gray-200 flex items-center justify-center">
+              <img src="assets/img/level2.png" class="h-full w-full object-cover" />
+            </div>
+
+            <div class="bg-[#10A594] text-white p-6 text-center">
+              <h3 class="text-xl font-semibold montserrat">Level 2</h3>
+              <p class="poppins opacity-90 text-sm mt-1">The Ascending Spike</p>
+            </div>
+
+          </div>
+        </div>
+
+        <div data-aos="fade-up" data-aos-delay="100">
+          <div
+            class="documentation-card rounded-2xl overflow-hidden bg-white transition-all duration-300 shadow-[0_4px_6px_2px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_12px_4px_rgba(0,0,0,0.3)] hover:-translate-y-1.5">
+
+            <div class="h-40 bg-gray-200 flex items-center justify-center">
+              <img src="assets/img/level3.png" class="h-full w-full object-cover" />
+            </div>
+
+            <div class="bg-[#10A594] text-white p-6 text-center">
+              <h3 class="text-xl font-semibold montserrat">Level 3</h3>
+              <p class="poppins opacity-90 text-sm mt-1">The Staircase of Danger.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <div data-aos="fade-up" data-aos-delay="100">
+          <div
+            class="documentation-card rounded-2xl overflow-hidden bg-white transition-all duration-300 shadow-[0_4px_6px_2px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_12px_4px_rgba(0,0,0,0.3)] hover:-translate-y-1.5">
+
+            <div class="h-40 bg-gray-200 flex items-center justify-center">
+              <img src="assets/img/level4.png" class="h-full w-full object-cover" />
+            </div>
+
+            <div class="bg-[#10A594] text-white p-6 text-center">
+              <h3 class="text-xl font-semibold montserrat">Level 4</h3>
+              <p class="poppins opacity-90 text-sm mt-1">The Vertical Test.</p>
+            </div>
+
+          </div>
+        </div>
+
+        <div data-aos="fade-up" data-aos-delay="100">
+          <div
+            class="documentation-card rounded-2xl overflow-hidden bg-white transition-all duration-300 shadow-[0_4px_6px_2px_rgba(0,0,0,0.2)] hover:shadow-[0_8px_12px_4px_rgba(0,0,0,0.3)] hover:-translate-y-1.5">
+
+            <div class="h-40 bg-gray-200 flex items-center justify-center">
+              <img src="assets/img/level5.png" class="h-full w-full object-cover" />
+            </div>
+
+            <div class="bg-[#10A594] text-white p-6 text-center">
+              <h3 class="text-xl font-semibold montserrat">Level 5</h3>
+              <p class="poppins opacity-90 text-sm mt-1">The Final Gauntlet.</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+      <section id="contact" class="contact-section py-10 px-4 bg-gray-100">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <div class="custom-card p-6 bg-white rounded-2xl">
+            <div class="flex items-center gap-2 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#1E90FF" class="size-8">
+                <path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z" />
+                <path
+                  d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z" />
+              </svg>
+
+              <h2 class="text-3xl poppins font-bold">Contact Us</h2>
+            </div>
+
+            <div class="space-y-3">
+              <input type="text" placeholder="Your Name" class="input-box contact-box" />
+
+              <input type="email" placeholder="Your Email" class="input-box contact-box" />
+
+              <textarea placeholder="Your Message" rows="5" class="input-box contact-box"></textarea>
+
+              <button class="btn-blue poppins p-4 rounded-full">Send Message</button>
+            </div>
+          </div>
+
+          <div class="custom-card p-6 bg-white rounded-2xl">
+            <div class="flex items-center gap-2 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#4F46E5" class="size-8">
+                <path fill-rule="evenodd"
+                  d="M4.848 2.771A49.144 49.144 0 0 1 12 2.25c2.43 0 4.817.178 7.152.52 1.978.292 3.348 2.024 3.348 3.97v6.02c0 1.946-1.37 3.678-3.348 3.97a48.901 48.901 0 0 1-3.476.383.39.39 0 0 0-.297.17l-2.755 4.133a.75.75 0 0 1-1.248 0l-2.755-4.133a.39.39 0 0 0-.297-.17 48.9 48.9 0 0 1-3.476-.384c-1.978-.29-3.348-2.024-3.348-3.97V6.741c0-1.946 1.37-3.68 3.348-3.97ZM6.75 8.25a.75.75 0 0 1 .75-.75h9a.75.75 0 0 1 0 1.5h-9a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H7.5Z"
+                  clip-rule="evenodd" />
+              </svg>
+
+              <h2 class="text-3xl poppins font-bold">Give Feedback</h2>
+            </div>
+
+            <div class="space-y-3">
+
+              <select class="input-box feedback-box poppins">
+                <option>Bug Report</option>
+                <option>Feature Request</option>
+                <option>UI/UX Feedback</option>
+                <option>Other</option>
+              </select>
+
+              <textarea placeholder="Your Message" rows="6" class="input-box feedback-box poppins"></textarea>
+
+              <button class="btn-purple poppins p-4 rounded-full">Send Feedback</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </section>
+  </main>
+
+
+  <footer class="bg-[#0B3C78] text-gray-200 py-12 mt-20">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
+
+      <div>
+        <h2 class="text-2xl font-bold montserrat text-white">RPL Project</h2>
+        <p class="text-sm mt-3 opacity-90 poppins">
+          A collection of software engineering projects, documentation, and innovations built by RPL students.
+        </p>
+
+        <div class="flex gap-4 mt-4">
+
+          <a href="#" class="hover:text-white transition text-gray-300">
+            <i class="fa-brands fa-instagram text-xl"></i>
+          </a>
+
+          <a href="#" class="hover:text-white transition text-gray-300">
+            <i class="fa-brands fa-github text-xl"></i>
+          </a>
+
+          <a href="#" class="hover:text-white transition text-gray-300">
+            <i class="fa-solid fa-envelope text-xl"></i>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold text-white mb-3 montserrat">Navigation</h3>
+        <ul class="space-y-2 poppins">
+          <li><a href="#hero" class="hover:text-white transition">Home</a></li>
+          <li><a href="#documentation" class="hover:text-white transition">Documentation</a></li>
+          <li><a href="#contact" class="hover:text-white transition">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold text-white mb-3 montserrat">Contact</h3>
+        <div class="flex items-center gap-3 mb-2">
+          <i class="fa-solid fa-envelope text-sm"></i>
+          <p class="text-sm">rplproject@example.com</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-phone text-sm"></i>
+          <p class="text-sm">+62 812-3456-7890</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-600 mt-10 pt-6 text-center text-sm opacity-80 poppins">
+      © 2025 RPL Project — All rights reserved.
+    </div>
+  </footer>
+
+
+
+</body>
+
 </html>
