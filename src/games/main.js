@@ -5,15 +5,24 @@ class GameScene extends Phaser.Scene {
     super("GameScene");
   }
 
+  preload() {
+    this.load.image('gameBackground', '../background/Summer5.png');
+    this.load.audio('bgm', '../sound/Backsound.mp3');
+    this.load.audio('jump_sound', '../sound/Jumpsound.mp3');
+    this.load.audio('level_complete_sound', '../sound/levelcomplete.mp3');
+    this.load.audio('win_sound', '../sound/winner.mp3');
+  }
+
   create() {
     this.currentLevel = 1;
     this.canJump = true;
     this.movingPlatformsArray = [];
 
-    // 1. Background gradient
-    const graphics = this.add.graphics();
-    graphics.fillGradientStyle(0x87ceeb, 0x87ceeb, 0xe0f6ff, 0xe0f6ff, 1);
-    graphics.fillRect(0, 0, 1280, 700);
+    // Add background image
+    this.add.image(0, 0, 'gameBackground').setOrigin(0, 0).setDisplaySize(1280, 700);
+
+    // Start background music
+    this.sound.play('bgm', { loop: true });
 
     // 2. Base Ground (Dipisah dari group level agar tidak terhapus saat reset level)
     this.baseGround = this.add.rectangle(640, 690, 1280, 20, 0x8b4513);
@@ -221,6 +230,7 @@ class GameScene extends Phaser.Scene {
 
     if (Phaser.Input.Keyboard.JustDown(this.spaceKey) && this.canJump) {
       this.player.body.setVelocityY(-500); // Increased jump force for gravity
+      this.sound.play('jump_sound');
     }
 
     // Stickman Animation
@@ -258,7 +268,7 @@ class GameScene extends Phaser.Scene {
 
   updateStickman() {
     this.stickmanGraphics.clear();
-    this.stickmanGraphics.lineStyle(3, 0x000000, 1);
+    this.stickmanGraphics.lineStyle(3, 0xffffff, 1);
 
     const x = this.player.x;
     const y = this.player.y;
@@ -437,6 +447,8 @@ class GameScene extends Phaser.Scene {
     this.currentLevel++;
 
     if (this.currentLevel > 5) {
+      this.sound.stopByKey('bgm');
+      this.sound.play('win_sound');
       this.winOverlay.setVisible(true);
       this.levelText.setText("🎉 YOU WIN! 🎉");
       this.levelText.setFontSize("60px");
@@ -466,8 +478,10 @@ class GameScene extends Phaser.Scene {
         this.createLevel(this.currentLevel);
         this.resetPlayer();
         this.isChangingLevel = false;
+        this.sound.play('bgm', { loop: true }); // Restart BGM
       });
     } else {
+      this.sound.play('level_complete_sound');
       this.levelText.setText("LEVEL " + this.currentLevel);
       this.cameras.main.flash(200);
       this.createLevel(this.currentLevel);
@@ -484,7 +498,6 @@ const config = {
   width: 1280,
   height: 700,
   parent: "game-container",
-  backgroundColor: "#87CEEB",
   physics: {
     default: "arcade",
     arcade: {
