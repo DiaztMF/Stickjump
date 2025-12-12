@@ -1,8 +1,11 @@
 import Phaser from "phaser";
+import nipplejs from "nipplejs";
 
 class GameScene extends Phaser.Scene {
   constructor() {
     super("GameScene");
+    this.joystickDirection = { x: 0, y: 0 };
+    this.isJumping = false;
   }
 
   preload() {
@@ -75,6 +78,41 @@ class GameScene extends Phaser.Scene {
 
     // Draw stickman graphics container
     this.stickmanGraphics = this.add.graphics();
+    
+    // Initialize Joystick
+    const joystickContainer = document.getElementById('joystick-container');
+    if (joystickContainer) {
+      const joystick = nipplejs.create({
+        zone: joystickContainer,
+        mode: 'static',
+        position: { left: '50%', top: '50%' },
+        color: 'white',
+      });
+
+      joystick.on('move', (evt, data) => {
+        this.joystickDirection.x = data.vector.x;
+        this.joystickDirection.y = data.vector.y;
+      });
+
+      joystick.on('end', () => {
+        this.joystickDirection.x = 0;
+        this.joystickDirection.y = 0;
+      });
+    }
+
+    // Initialize Jump Button
+    const jumpButton = document.getElementById('jump-button');
+    if (jumpButton) {
+      jumpButton.addEventListener('pointerdown', () => {
+        this.isJumping = true;
+      });
+      jumpButton.addEventListener('pointerup', () => {
+        this.isJumping = false;
+      });
+      jumpButton.addEventListener('pointerout', () => {
+        this.isJumping = false;
+      });
+    }
 
     // 6. Level Data
     this.levels = {
@@ -212,13 +250,13 @@ class GameScene extends Phaser.Scene {
 
   update() {
     // Player movement
-    if (this.cursors.left.isDown || this.keyA.isDown) {
+    if (this.joystickDirection.x > 0) {
+      this.player.body.setVelocityX(200);
+    } else if (this.joystickDirection.x < 0) {
+      this.player.body.setVelocityX(-200);
+    } else if (this.cursors.left.isDown || this.keyA.isDown) {
       this.player.body.setVelocityX(-200);
     } else if (this.cursors.right.isDown || this.keyD.isDown) {
-      this.player.body.setVelocityX(200);
-    } else if (this.cursors.left.isDown) {
-      this.player.body.setVelocityX(-200);
-    } else if (this.cursors.right.isDown) {
       this.player.body.setVelocityX(200);
     } else {
       this.player.body.setVelocityX(0);
@@ -228,9 +266,12 @@ class GameScene extends Phaser.Scene {
     this.canJump =
       this.player.body.touching.down || this.player.body.blocked.down;
 
-    if (Phaser.Input.Keyboard.JustDown(this.spaceKey) && this.canJump) {
+    if ((Phaser.Input.Keyboard.JustDown(this.spaceKey) || this.isJumping) && this.canJump) {
       this.player.body.setVelocityY(-500); // Increased jump force for gravity
       this.sound.play('jump_sound');
+      if (this.isJumping) {
+        this.isJumping = false; // Prevent repeated jumps while holding the button
+      }
     }
 
     // Stickman Animation
