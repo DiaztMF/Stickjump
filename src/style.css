@@ -12,8 +12,17 @@ body {
   background-position: center;
 }
 
-#joystick-container {
+#joystick-container,
+#jump-button {
   display: none; /* Hidden by default */
+}
+
+body.mobile #joystick-container,
+body.mobile #jump-button {
+  display: block; /* Show on mobile */
+}
+
+#joystick-container {
   position: absolute;
   bottom: 50px;
   left: 50px;
@@ -22,7 +31,6 @@ body {
 }
 
 #jump-button {
-  display: none; /* Hidden by default */
   position: absolute;
   bottom: 50px;
   right: 50px;
@@ -38,12 +46,4 @@ body {
   font-size: 18px;
   font-weight: bold;
   color: white;
-}
-
-/* Media query for mobile devices */
-@media (max-width: 768px) {
-  #joystick-container,
-  #jump-button {
-    display: block; /* Show on mobile */
-  }
 }

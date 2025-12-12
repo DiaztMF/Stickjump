@@ -79,6 +79,11 @@ class GameScene extends Phaser.Scene {
     // Draw stickman graphics container
     this.stickmanGraphics = this.add.graphics();
     
+    // Check for touch support and add a class to the body
+    if ('ontouchstart' in window) {
+      document.body.classList.add('mobile');
+    }
+
     // Initialize Joystick
     const joystickContainer = document.getElementById('joystick-container');
     if (joystickContainer) {
