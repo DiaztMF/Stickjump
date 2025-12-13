@@ -31,7 +31,42 @@ class GameScene extends Phaser.Scene {
     this.baseGround = this.add.rectangle(640, 690, 1280, 20, 0x8b4513);
     this.physics.add.existing(this.baseGround, true); // Static body
 
+    // Create Lava at the bottom
+    this.lava = this.add.rectangle(
+      this.scale.width / 2,
+      this.scale.height + 50, // Position it slightly below the bottom edge initially
+      this.scale.width,
+      100, // Height of the lava
+      0xff4500 // Orange-red color for lava
+    );
+    this.physics.add.existing(this.lava, true); // Make it a static body
+
+    // Generate bird texture
+    const birdGraphics = this.add.graphics();
+    birdGraphics.fillStyle(0x000000, 1);
+    birdGraphics.slice(10, 10, 10, 0, 180, true);
+    birdGraphics.fillPath();
+    birdGraphics.generateTexture('bird', 20, 20);
+    birdGraphics.destroy();
+
+    // Generate coin texture
+    const coinGraphics = this.add.graphics();
+    coinGraphics.fillStyle(0xffd700, 1); // Gold color
+    coinGraphics.fillCircle(10, 10, 10);
+    coinGraphics.generateTexture('coin', 20, 20);
+    coinGraphics.destroy();
+
     // 3. UI
+    this.score = 0;
+    this.coinIcon = this.add.image(1180, 35, 'coin').setDepth(9998);
+    this.scoreText = this.add.text(1200, 16, "0", {
+      fontSize: "32px",
+      fill: "#fff",
+      fontStyle: "bold",
+      stroke: "#000",
+      strokeThickness: 2,
+    }).setDepth(9999);
+    
     this.levelText = this.add.text(16, 16, "LEVEL 1", {
       fontSize: "32px",
       fill: "#fff",
@@ -60,11 +95,22 @@ class GameScene extends Phaser.Scene {
     // 4. Initialize Groups
     this.platformsGroup = this.physics.add.staticGroup(); // Hanya untuk platform level
     this.spikesGroup = this.physics.add.staticGroup(); // Spikes sebaiknya static
+    this.coinsGroup = this.physics.add.staticGroup(); // Group untuk koin
 
     // Group khusus moving platform (kinematic)
     this.movingPlatformsGroup = this.physics.add.group({
       immovable: true,
       allowGravity: false,
+    });
+
+    this.birdsGroup = this.physics.add.group({
+      allowGravity: false
+    });
+    this.time.addEvent({
+      delay: 3000,
+      callback: this.spawnBird,
+      callbackScope: this,
+      loop: true,
     });
 
     // 5. Create Player
@@ -79,11 +125,6 @@ class GameScene extends Phaser.Scene {
     // Draw stickman graphics container
     this.stickmanGraphics = this.add.graphics();
     
-    // Check for touch support and add a class to the body
-    if ('ontouchstart' in window) {
-      document.body.classList.add('mobile');
-    }
-
     // Initialize Joystick
     const joystickContainer = document.getElementById('joystick-container');
     if (joystickContainer) {
@@ -132,6 +173,11 @@ class GameScene extends Phaser.Scene {
           { x: 280, y: 640 },
           { x: 450, y: 540 },
         ],
+        coins: [
+          { x: 200, y: 600 },
+          { x: 400, y: 500 },
+          { x: 500, y: 400 },
+        ],
         finish: { x: 700, y: 400 },
       },
       2: {
@@ -150,6 +196,12 @@ class GameScene extends Phaser.Scene {
         ],
         movingPlatforms: [
           { startX: 250, y: 350, endX: 380, speed: 100, width: 100 },
+        ],
+        coins: [
+          { x: 100, y: 500 },
+          { x: 300, y: 430 },
+          { x: 500, y: 350 },
+          { x: 680, y: 270 },
         ],
         finish: { x: 730, y: 270 },
       },
@@ -172,6 +224,12 @@ class GameScene extends Phaser.Scene {
           { startX: 180, y: 380, endX: 320, speed: 120, width: 90 },
           { startX: 520, y: 280, endX: 680, speed: 150, width: 90 },
         ],
+        coins: [
+          { x: 100, y: 500 },
+          { x: 280, y: 430 },
+          { x: 450, y: 370 },
+          { x: 620, y: 300 },
+        ],
         finish: { x: 750, y: 220 },
       },
       4: {
@@ -187,6 +245,12 @@ class GameScene extends Phaser.Scene {
         movingPlatforms: [
           { startX: 250, y: 480, endX: 620, speed: 120, width: 90 },
           { startX: 520, y: 280, endX: 680, speed: 150, width: 90 },
+        ],
+        coins: [
+          { x: 100, y: 500 },
+          { x: 350, y: 430 },
+          { x: 520, y: 330 },
+          { x: 600, y: 230 },
         ],
         finish: { x: 750, y: 220 },
       },
@@ -212,6 +276,13 @@ class GameScene extends Phaser.Scene {
         movingPlatforms: [
           { startX: 180, y: 420, endX: 360, speed: 130, width: 100 },
           { startX: 500, y: 260, endX: 750, speed: 160, width: 90 },
+        ],
+        coins: [
+          { x: 80, y: 510 },
+          { x: 250, y: 450 },
+          { x: 420, y: 390 },
+          { x: 600, y: 330 },
+          { x: 720, y: 250 },
         ],
         finish: { x: 760, y: 250 },
       },
@@ -242,7 +313,21 @@ class GameScene extends Phaser.Scene {
       this.reachFinish,
       null,
       this
-    ); // Note: finishSprite recreated per level
+    );
+    this.physics.add.overlap(
+      this.player,
+      this.lava,
+      this.hitLava,
+      null,
+      this
+    );
+    this.physics.add.overlap(
+      this.player,
+      this.coinsGroup,
+      this.collectCoin,
+      null,
+      this
+    );
 
     // Input
     this.keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -306,10 +391,16 @@ class GameScene extends Phaser.Scene {
       }
     });
 
-    // Reset if fall out of world
     if (this.player.y > 650) {
       this.resetPlayer();
     }
+
+    // Clean up off-screen birds
+    this.birdsGroup.getChildren().forEach(bird => {
+      if (bird.x > this.scale.width) {
+        bird.destroy();
+      }
+    });
   }
 
   updateStickman() {
@@ -356,6 +447,7 @@ class GameScene extends Phaser.Scene {
     this.platformsGroup.clear(true, true);
     this.spikesGroup.clear(true, true);
     this.movingPlatformsGroup.clear(true, true);
+    this.coinsGroup.clear(true, true);
     this.movingPlatformsArray = [];
 
     if (this.finishSprite) this.finishSprite.destroy();
@@ -375,6 +467,13 @@ class GameScene extends Phaser.Scene {
       platform.setStrokeStyle(2, 0x654321);
       this.platformsGroup.add(platform);
     });
+
+    // Coins
+    if (levelData.coins) {
+      levelData.coins.forEach(c => {
+        this.coinsGroup.create(c.x, c.y, 'coin');
+      });
+    }
 
     // Moving Platforms
     if (levelData.movingPlatforms) {
@@ -474,7 +573,25 @@ class GameScene extends Phaser.Scene {
     );
   }
 
+  collectCoin(player, coin) {
+    coin.disableBody(true, true);
+    this.sound.play('jump_sound');
+    this.score++;
+    this.scoreText.setText(this.score);
+  }
+
+  spawnBird() {
+    const birdY = Phaser.Math.Between(50, 200);
+    const birdSprite = this.birdsGroup.create(0, birdY, 'bird');
+    birdSprite.body.velocity.x = Phaser.Math.Between(100, 200);
+  }
+
   hitSpike(player, spike) {
+    this.cameras.main.shake(200, 0.01);
+    this.resetPlayer();
+  }
+
+  hitLava(player, lava) {
     this.cameras.main.shake(200, 0.01);
     this.resetPlayer();
   }
@@ -510,6 +627,8 @@ class GameScene extends Phaser.Scene {
 
       this.time.delayedCall(5000, () => {
         this.currentLevel = 1;
+        this.score = 0;
+        this.scoreText.setText(this.score);
         this.levelText.setText("LEVEL 1");
         this.levelText.setFontSize("32px");
 
@@ -544,10 +663,14 @@ const config = {
   width: 1280,
   height: 700,
   parent: "game-container",
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+  },
   physics: {
     default: "arcade",
     arcade: {
-      gravity: { y: 1000 }, // FIX: Gravity added!
+      gravity: { y: 1000 },
       debug: false,
     },
   },

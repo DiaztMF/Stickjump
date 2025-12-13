@@ -12,17 +12,8 @@ body {
   background-position: center;
 }
 
-#joystick-container,
-#jump-button {
-  display: none; /* Hidden by default */
-}
-
-body.mobile #joystick-container,
-body.mobile #jump-button {
-  display: block; /* Show on mobile */
-}
-
 #joystick-container {
+  display: none; /* Hidden by default */
   position: absolute;
   bottom: 50px;
   left: 50px;
@@ -31,6 +22,7 @@ body.mobile #jump-button {
 }
 
 #jump-button {
+  display: none; /* Hidden by default */
   position: absolute;
   bottom: 50px;
   right: 50px;
@@ -40,10 +32,19 @@ body.mobile #jump-button {
   border-radius: 50%;
   border: 2px solid white;
   cursor: pointer;
-  display: flex;
   justify-content: center;
   align-items: center;
   font-size: 18px;
   font-weight: bold;
   color: white;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  #joystick-container {
+    display: block; /* Show on mobile */
+  }
+  #jump-button {
+    display: flex; /* Show on mobile as flex */
+  }
 }
