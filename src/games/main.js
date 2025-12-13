@@ -16,6 +16,14 @@ class GameScene extends Phaser.Scene {
     this.load.audio('win_sound', '../sound/winner.mp3');
   }
 
+  preload() {
+    this.load.image('gameBackground', '/background/Summer5.png');
+    this.load.audio('bgm', '/sound/Backsound.mp3');
+    this.load.audio('jump_sound', '/sound/Jumpsound.mp3');
+    this.load.audio('level_complete_sound', '/sound/levelcomplete.mp3');
+    this.load.audio('win_sound', '/sound/winner.mp3');
+  }
+
   create() {
     this.currentLevel = 1;
     this.canJump = true;
@@ -359,9 +367,12 @@ class GameScene extends Phaser.Scene {
     if ((Phaser.Input.Keyboard.JustDown(this.spaceKey) || this.isJumping) && this.canJump) {
       this.player.body.setVelocityY(-500); // Increased jump force for gravity
       this.sound.play('jump_sound');
+
       if (this.isJumping) {
         this.isJumping = false; // Prevent repeated jumps while holding the button
       }
+
+
     }
 
     // Stickman Animation
@@ -663,10 +674,12 @@ const config = {
   width: 1280,
   height: 700,
   parent: "game-container",
+
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
+
   physics: {
     default: "arcade",
     arcade: {
