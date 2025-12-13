@@ -10,4 +10,42 @@ body {
   background-image: url('./background/Summer5.png');
   background-size: cover;
   background-position: center;
+
+}
+
+#joystick-container {
+  display: none; /* Hidden by default */
+  position: absolute;
+  bottom: 50px;
+  left: 50px;
+  width: 100px;
+  height: 100px;
+}
+
+#jump-button {
+  display: none; /* Hidden by default */
+  position: absolute;
+  bottom: 50px;
+  right: 50px;
+  width: 80px;
+  height: 80px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  border: 2px solid white;
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  #joystick-container {
+    display: block; /* Show on mobile */
+  }
+  #jump-button {
+    display: flex; /* Show on mobile as flex */
+  }
 }
